@@ -1,0 +1,39 @@
+-- LocalScript to highlight all players in the game
+
+-- Function to highlight a player's character
+local function highlightCharacter(character)
+	-- Create a Highlight instance
+	local highlight = Instance.new("Highlight")
+	highlight.Name = "PlayerHighlight"
+	highlight.FillColor = Color3.fromRGB(255, 215, 0)  -- Gold color for the highlight
+	highlight.FillTransparency = 0.5  -- Semi-transparent fill
+	highlight.OutlineColor = Color3.fromRGB(255, 255, 0)  -- Yellow outline
+	highlight.OutlineTransparency = 0  -- Opaque outline
+
+	-- Parent the Highlight to the character model
+	highlight.Parent = character
+end
+
+-- Function to handle player added
+local function onPlayerAdded(player)
+	-- Function to handle character added
+	local function onCharacterAdded(character)
+		highlightCharacter(character)
+	end
+
+	-- Connect to the CharacterAdded event
+	player.CharacterAdded:Connect(onCharacterAdded)
+
+	-- If the character already exists (e.g., player joined before script ran), highlight it
+	if player.Character then
+		highlightCharacter(player.Character)
+	end
+end
+
+-- Connect to the PlayerAdded event
+game.Players.PlayerAdded:Connect(onPlayerAdded)
+
+-- Highlight all players already in the game when the script runs
+for _, player in pairs(game.Players:GetPlayers()) do
+	onPlayerAdded(player)
+end
